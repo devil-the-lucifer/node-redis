@@ -19,7 +19,7 @@ const redisClientService = async () => {
       console.error(`Redis Client Error: ${err.message}`);
       return true; // Reconnect on error
     },
-    connectTimeout: 20000, // Set connection timeout to 20 seconds
+    connectTimeout: 3000, // Set connection timeout to 20 seconds
     keepAlive: 5000, // Keep connection alive every 5 seconds
   });
 
