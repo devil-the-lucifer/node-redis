@@ -14,6 +14,7 @@ const Redis = require('ioredis');
 const redisClientService = async () => {
   // Create a new Redis client using ioredis
   const client = new Redis(process.env.REDIS_URI, {
+     tls: {},
     reconnectOnError: (err) => {
       console.error(`Redis Client Error: ${err.message}`);
       return true; // Reconnect on error
