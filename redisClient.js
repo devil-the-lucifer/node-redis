@@ -66,8 +66,7 @@
 
 
 // src/utils/redisClient.ts
-import logger from '../loaders/logger';
-import Redis, { RedisOptions } from 'ioredis';
+const { Redis} = require('ioredis');
 
 let redisInstance: Redis | null = null;
 
@@ -94,26 +93,26 @@ export const createRedisClient = async (): Promise<Redis> => {
 
   // Connection events
   client.on('connect', () => {
-    logger.info('Redis: Connecting to DigitalOcean Managed Redis...');
+    console.log('Redis: Connecting to DigitalOcean Managed Redis...');
   });
 
   client.on('ready', () => {
-    logger.info('Redis: Connected to DigitalOcean Managed Redis');
+    console.log('Redis: Connected to DigitalOcean Managed Redis');
   });
 
   client.on('error', (err) => {
-    logger.error(`Redis Managed DB Error: ${err.message}`);
+    console.log(`Redis Managed DB Error: ${err.message}`);
     if (err.message.includes('ECONNREFUSED')) {
-      logger.error('Check firewall rules and VPC/private network settings');
+      console.log('Check firewall rules and VPC/private network settings');
     }
   });
 
   client.on('close', () => {
-    logger.warn('Redis: Connection to Managed Redis closed');
+   console.log('Redis: Connection to Managed Redis closed');
   });
 
   client.on('reconnecting', (delay) => {
-    logger.info(`Redis: Reconnecting to Managed Redis in ${delay}ms`);
+    console.log(`Redis: Reconnecting to Managed Redis in ${delay}ms`);
   });
 
   // Health check
@@ -121,17 +120,17 @@ export const createRedisClient = async (): Promise<Redis> => {
     try {
       await client.ping();
     } catch (err) {
-      logger.error('Redis Managed DB health check failed:', err.message);
+      console.log('Redis Managed DB health check failed:', err.message);
     }
   }, 30000); // 30s health checks
 
   try {
     await client.ping();
-    logger.info('Redis Managed DB connection validated');
+    console.log('Redis Managed DB connection validated');
     redisInstance = client;
     return client;
   } catch (err) {
-    logger.error('Failed to connect to Redis Managed DB:', err.message);
+    console.log('Failed to connect to Redis Managed DB:', err.message);
     throw new Error('Redis Managed DB connection failed');
   }
 };
@@ -140,9 +139,9 @@ export const closeRedisClient = async (): Promise<void> => {
   if (redisInstance) {
     try {
       await redisInstance.quit();
-      logger.info('Redis Managed DB connection closed gracefully');
+      console.log('Redis Managed DB connection closed gracefully');
     } catch (err) {
-      logger.error('Error closing Redis Managed DB connection:', err.message);
+      console.log('Error closing Redis Managed DB connection:', err.message);
     } finally {
       redisInstance = null;
     }
