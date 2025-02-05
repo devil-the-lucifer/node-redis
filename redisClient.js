@@ -6,7 +6,7 @@ const redisClientService = async () => {
      host: process.env.REDIS_HOST, // Redis server hostname
     port: process.env.REDIS_PORT, // Redis server port
     password: process.env.REDIS_PASWORD,
-    username:process.env.REDIS_USERNAME
+    username:process.env.REDIS_USERNAME,
      tls: {},
     reconnectOnError: (err) => {
       console.error(`Redis Client Error: ${err.message}`);
